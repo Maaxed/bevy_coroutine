@@ -152,14 +152,18 @@ fn update_coroutines(
 	world: &mut World
 )
 {
-	world.resource_scope::<Coroutines, _>(|world, mut coroutines|
-	{
-		coroutines.0.retain_mut(|stack|
+	// Take all registered coroutines
+	let mut coroutines = std::mem::take(&mut world.resource_mut::<Coroutines>().0);
+
+	// Execute the coroutines and remove the completed ones
+	coroutines.retain_mut(|stack|
 		{
 			stack.resume(world).unwrap();
 			!stack.stack.is_empty()
 		});
-	});
+	
+	// Put the coroutines back in the registry, we need to append because coroutines can register new coroutines
+	world.resource_mut::<Coroutines>().0.append(&mut coroutines);
 }
 
 pub fn launch_coroutine<M, C: IntoCoroutines<M> + Clone>(coroutines: C) -> impl Fn(Commands) + Clone
@@ -216,3 +220,39 @@ macro_rules! impl_coroutine_collection
 }
 
 all_tuples!(impl_coroutine_collection, 1, 20, S, s, M);
+
+
+#[cfg(test)]
+mod test
+{
+	use crate::prelude::*;
+    use bevy::prelude::*;
+
+	#[test]
+	fn coroutine_in_coroutine()
+	{
+		let mut app = App::new();
+		app.add_plugins(CoroutinePlugin);
+
+		#[derive(Debug, Default, Resource, PartialEq, Eq)]
+		struct TestEvents(Vec<&'static str>);
+
+		app.init_resource::<TestEvents>();
+
+		app.add_systems(Startup, launch_coroutine(|mut events: ResMut<TestEvents>, mut commands: Commands|
+		{
+			events.0.push("COROUTINE_1");
+			commands.add(Coroutine::new(|mut events: ResMut<TestEvents>|
+			{
+				events.0.push("COROUTINE_2");
+				CoResult::break_()
+			}));
+			CoResult::break_()
+		}));
+
+		app.update();
+		app.update();
+
+		assert_eq!(app.world().resource::<TestEvents>(), &TestEvents(vec!["COROUTINE_1", "COROUTINE_2"]));
+	}
+}
