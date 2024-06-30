@@ -1,4 +1,5 @@
-mod system_util;
+pub mod system_util;
+pub mod waiting;
 
 use std::ops::ControlFlow;
 
@@ -14,6 +15,8 @@ pub mod prelude
 		CoResult,
 		CoroutinePlugin,
 		system_util::with_input,
+		launch_coroutine,
+		waiting::wait,
 	};
 }
 
@@ -25,10 +28,13 @@ impl Plugin for CoroutinePlugin
 	{
 		app
 			.init_resource::<Coroutines>()
-			.add_systems(Update, update_coroutines)
+			.add_systems(Update, update_coroutines.in_set(CoroutineSystemSet))
 		;
 	}
 }
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, SystemSet)]
+pub struct CoroutineSystemSet;
 
 pub type BoxedCoroutine = BoxedSystem<(), CoResult>;
 pub struct CoResult
@@ -154,6 +160,14 @@ fn update_coroutines(
 			!stack.stack.is_empty()
 		});
 	});
+}
+
+pub fn launch_coroutine<M, C: IntoCoroutines<M> + Clone>(coroutines: C) -> impl Fn(Commands) + Clone
+{
+	move |mut commands: Commands|
+	{
+		commands.add(Coroutine::new(coroutines.clone()));
+	}
 }
 
 pub trait IntoCoroutines<Marker>: Sized
