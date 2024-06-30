@@ -1,3 +1,5 @@
+mod system_util;
+
 use std::ops::ControlFlow;
 
 use bevy::ecs::system::{BoxedSystem, RegisteredSystemError, SystemId};
@@ -5,6 +7,15 @@ use bevy::ecs::world::Command;
 use bevy::prelude::*;
 use bevy::utils::all_tuples;
 
+pub mod prelude
+{
+	pub use super::{
+		Coroutine,
+		CoResult,
+		CoroutinePlugin,
+		system_util::with_input,
+	};
+}
 
 pub struct CoroutinePlugin;
 
