@@ -9,6 +9,9 @@ The main motivation behind Bevy Coroutine is to allows you to spread the executi
 It also helps with managing and running systems in sequence over time.
 
 ```rust
+use bevy::prelude::*;
+use bevy_coroutine::prelude::*;
+
 fn startup_system(mut commands: Commands) {
 	// Launch the coroutine from a system
 	commands.add(Coroutine::new(my_coroutine));
@@ -21,7 +24,7 @@ fn my_coroutine(
 	// Print number from 0 to 3, printing a single number every second
 	for i in 0..=3 {
 		res.add_subroutines((
-			wait(Duration::from_secs(1)),
+			wait(std::time::Duration::from_secs(1)),
 			with_input(i, print_number),
 		));
 	}
@@ -44,6 +47,9 @@ In addition, a coroutine can run other coroutines and wait for their completion 
 The state of execution of your coroutine can be stored between frames using ``Local``s as parameters in the coroutine system.
 
 ```rust
+use bevy::prelude::*;
+use bevy_coroutine::prelude::*;
+
 fn my_coroutine(
 	mut i: Local<u32>,
 ) -> CoResult {

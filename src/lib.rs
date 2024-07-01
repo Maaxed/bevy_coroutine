@@ -1,6 +1,6 @@
 #![warn(missing_docs)]
 
-//! TODO crate level doc
+#![doc=include_str!("../README.md")]
 
 
 mod system_util;
