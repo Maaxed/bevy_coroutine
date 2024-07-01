@@ -25,7 +25,7 @@ fn run_coroutines(
 fn print_numbers(
 ) -> CoResult
 {
-	let mut res = CoResult::break_();
+	let mut res = co_break();
 	for i in 0..=3
 	{
 		res.add_subroutines(with_input(i, print_number));
@@ -40,11 +40,11 @@ fn print_number(
 {
 	println!("{i}");
 
-	CoResult::break_()
+	co_break()
 }
 
 fn stop_app(mut exit: EventWriter<AppExit>) -> CoResult
 {
 	exit.send(AppExit::Success);
-	CoResult::break_()
+	co_break()
 }

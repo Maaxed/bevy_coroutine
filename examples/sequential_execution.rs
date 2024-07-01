@@ -30,15 +30,15 @@ fn print_numbers(
 	{
 		println!("{}", *i);
 		*i += 1;
-		return CoResult::continue_();
+		return co_continue();
 	}
 	println!("STOP");
 
-	CoResult::break_()
+	co_break()
 }
 
 fn stop_app(mut exit: EventWriter<AppExit>) -> CoResult
 {
 	exit.send(AppExit::Success);
-	CoResult::break_()
+	co_break()
 }

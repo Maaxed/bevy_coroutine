@@ -34,10 +34,10 @@ fn print_numbers(
 	{
 		println!("{}", *i);
 		*i += 1;
-		return CoResult::continue_();
+		return co_continue();
 	}
 
-	CoResult::break_()
+	co_break()
 }
 
 fn stop_app(

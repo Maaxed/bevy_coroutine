@@ -22,6 +22,8 @@ pub mod prelude
 	pub use crate::{
 		Coroutine,
 		CoResult,
+		co_continue,
+		co_break,
 		CoroutinePlugin,
 		with_input,
 		launch_coroutine,
@@ -59,28 +61,28 @@ pub struct CoResult
 	pub subroutines: Vec<BoxedCoroutine>,
 }
 
+/// Rerun the current coroutine next update.
+pub fn co_continue() -> CoResult
+{
+	CoResult
+	{
+		control_flow: ControlFlow::Continue(()),
+		subroutines: Vec::new(),
+	}
+}
+
+/// Stops the execution of the current coroutine.
+pub fn co_break() -> CoResult
+{
+	CoResult
+	{
+		control_flow: ControlFlow::Break(()),
+		subroutines: Vec::new(),
+	}
+}
+
 impl CoResult
 {
-	/// Rerun the current coroutine next update.
-	pub fn continue_() -> Self
-	{
-		CoResult
-		{
-			control_flow: ControlFlow::Continue(()),
-			subroutines: Vec::new(),
-		}
-	}
-	
-	/// Stops the execution of the current coroutine.
-	pub fn break_() -> Self
-	{
-		CoResult
-		{
-			control_flow: ControlFlow::Break(()),
-			subroutines: Vec::new(),
-		}
-	}
-
 	/// Adds one or more coroutine systems to run sequentially before resuming the current coroutine.
 	pub fn add_subroutines<M>(&mut self, subroutines: impl IntoCoroutines<M>)
 	{
@@ -158,7 +160,7 @@ struct Coroutines(Vec<CoroutineStack>);
 /// }
 /// 
 /// fn my_coroutine() -> CoResult {
-///     CoResult::break_()
+///     co_break()
 /// }
 /// ```
 pub struct Coroutine(Vec<BoxedCoroutine>);
@@ -217,7 +219,7 @@ fn update_coroutines(
 /// app.add_systems(Startup, launch_coroutine(my_coroutine));
 /// 
 /// fn my_coroutine() -> CoResult {
-///     CoResult::break_()
+///     co_break()
 /// }
 /// ```
 pub fn launch_coroutine<M, C: IntoCoroutines<M> + Clone>(coroutines: C) -> impl Fn(Commands) + Clone
@@ -302,9 +304,9 @@ mod test
 			commands.add(Coroutine::new(|mut events: ResMut<TestEvents>|
 			{
 				events.0.push("COROUTINE_2");
-				CoResult::break_()
+				co_break()
 			}));
-			CoResult::break_()
+			co_break()
 		}));
 
 		app.update();

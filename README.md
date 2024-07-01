@@ -17,7 +17,7 @@ fn startup_system(mut commands: Commands) {
 fn my_coroutine(
 
 ) -> CoResult {
-	let mut res = CoResult::break_();
+	let mut res = co_break();
 	// Print number from 0 to 3, printing a single number every second
 	for i in 0..=3 {
 		res.add_subroutines((
@@ -32,7 +32,7 @@ fn print_number(
 	In(i): In<u32>,
 ) -> CoResult {
 	println!("{i}");
-	CoResult::break_()
+	co_break()
 }
 ```
 
@@ -51,9 +51,9 @@ fn my_coroutine(
 	{
 		println!("{}", *i);
 		*i += 1;
-		return CoResult::continue_(); // Rerun the system next frame
+		return co_continue(); // Rerun the system next frame
 	}
-	CoResult::break_()
+	co_break()
 }
 ```
 

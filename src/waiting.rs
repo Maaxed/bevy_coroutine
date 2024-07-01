@@ -3,17 +3,17 @@ use std::time::Duration;
 use bevy::ecs::system::{Adapt, AdapterSystem};
 use bevy::prelude::*;
 
-use crate::CoResult;
+use crate::{CoResult, co_continue, co_break};
 
 fn break_if(break_: bool) -> CoResult
 {
 	if break_
 	{
-		CoResult::break_()
+		co_break()
 	}
 	else
 	{
-		CoResult::continue_()
+		co_continue()
 	}
 }
 
@@ -47,7 +47,7 @@ pub fn wait_until<M, S: IntoSystem<(), bool, M>>(condition: S) -> AdapterSystem<
 	AdapterSystem::new(UntilMarker, system, name.into())
 }
 
-/// Used with [`AdapterSystem`] to return `CoResult::break_()` when the system return true
+/// Used with [`AdapterSystem`] to return `co_break()` when the system return true
 #[doc(hidden)]
 #[derive(Copy, Clone)]
 pub struct UntilMarker;
@@ -74,7 +74,7 @@ pub fn wait_while<M, S: IntoSystem<(), bool, M>>(condition: S) -> AdapterSystem<
 	AdapterSystem::new(WhileMarker, system, name.into())
 }
 
-/// Used with [`AdapterSystem`] to return `CoResult::break_()` when the system return false
+/// Used with [`AdapterSystem`] to return `co_break()` when the system return false
 #[doc(hidden)]
 #[derive(Copy, Clone)]
 pub struct WhileMarker;

@@ -24,14 +24,14 @@ fn main()
 fn print_numbers(
 ) -> CoResult
 {
-	let mut res = CoResult::break_();
+	let mut res = co_break();
 	for i in 0..=3
 	{
 		res.add_subroutines((
 			wait(Duration::from_secs(1)),
 			move || {
 				println!("{}", i);
-				CoResult::break_()
+				co_break()
 			}
 		));
 	}
@@ -42,5 +42,5 @@ fn print_numbers(
 fn stop_app(mut exit: EventWriter<AppExit>) -> CoResult
 {
 	exit.send(AppExit::Success);
-	CoResult::break_()
+	co_break()
 }
