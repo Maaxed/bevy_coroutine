@@ -17,6 +17,7 @@ fn break_if(break_: bool) -> CoResult
 	}
 }
 
+/// Generates a coroutine system that waits for the given duration then breaks
 pub fn wait(duration: Duration) -> impl FnMut(Res<Time>) -> CoResult + Clone
 {
 	let mut timer = Timer::new(duration, TimerMode::Once);
@@ -27,6 +28,7 @@ pub fn wait(duration: Duration) -> impl FnMut(Res<Time>) -> CoResult + Clone
 	}
 }
 
+/// Generates a coroutine system that waits for the given real time duration then breaks
 pub fn wait_real_time(duration: Duration) -> impl FnMut(Res<Time<Real>>) -> CoResult + Clone
 {
 	let mut timer = Timer::new(duration, TimerMode::Once);
@@ -37,6 +39,7 @@ pub fn wait_real_time(duration: Duration) -> impl FnMut(Res<Time<Real>>) -> CoRe
 	}
 }
 
+/// Generates a coroutine system that waits until the given system returns true then breaks
 pub fn wait_until<M, S: IntoSystem<(), bool, M>>(condition: S) -> AdapterSystem<UntilMarker, S::System>
 {
 	let system = IntoSystem::into_system(condition);
@@ -44,6 +47,8 @@ pub fn wait_until<M, S: IntoSystem<(), bool, M>>(condition: S) -> AdapterSystem<
 	AdapterSystem::new(UntilMarker, system, name.into())
 }
 
+/// Used with [`AdapterSystem`] to return `CoResult::break_()` when the system return true
+#[doc(hidden)]
 #[derive(Copy, Clone)]
 pub struct UntilMarker;
 
@@ -61,6 +66,7 @@ where
 }
 
 
+/// Generates a coroutine system that waits while the given system returns true then breaks
 pub fn wait_while<M, S: IntoSystem<(), bool, M>>(condition: S) -> AdapterSystem<WhileMarker, S::System>
 {
 	let system = IntoSystem::into_system(condition);
@@ -68,6 +74,8 @@ pub fn wait_while<M, S: IntoSystem<(), bool, M>>(condition: S) -> AdapterSystem<
 	AdapterSystem::new(WhileMarker, system, name.into())
 }
 
+/// Used with [`AdapterSystem`] to return `CoResult::break_()` when the system return false
+#[doc(hidden)]
 #[derive(Copy, Clone)]
 pub struct WhileMarker;
 
