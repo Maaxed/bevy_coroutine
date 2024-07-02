@@ -1,5 +1,10 @@
 # Bevy Coroutine
 
+[![Docs](https://docs.rs/bevy_coroutine/badge.svg)](https://docs.rs/bevy_coroutine/latest/bevy_coroutine/)
+[![Crates.io](https://img.shields.io/crates/v/bevy_coroutine.svg)](https://crates.io/crates/bevy_coroutine)
+[![Downloads](https://img.shields.io/crates/d/bevy_coroutine.svg)](https://crates.io/crates/bevy_coroutine)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Maaxed/bevy_coroutine/blob/master/LICENSE)
+
 A simple [Bevy](https://bevyengine.org/) library to run coroutines similar to [Unity's coroutines](https://docs.unity3d.com/Manual/Coroutines.html).  
 Bevy Coroutine is very experimental and new versions may contain breaking changes !
 
