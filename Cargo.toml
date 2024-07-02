@@ -1,7 +1,13 @@
 [package]
 name = "bevy_coroutine"
-version = "0.0.1"
+version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "A simple library to run coroutines in Bevy"
+repository = "https://github.com/Maaxed/bevy_coroutine/"
+keywords = ["game", "gamedev", "bevy", "coroutine", "async"]
+categories = ["game-development", "asynchronous"]
+authors = ["Maaxed"]
 
 
 # Enable a small amount of optimization in debug mode
