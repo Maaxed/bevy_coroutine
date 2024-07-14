@@ -129,7 +129,8 @@ impl CoroutineStack
 			if output.control_flow.is_break()
 			{
 				world.remove_system(co_system)?;
-				debug_assert_eq!(self.stack.pop().unwrap(), co_system);
+				let pop = self.stack.pop();
+				debug_assert_eq!(pop.unwrap(), co_system);
 			}
 
 			// Last in the stack is always executed first, so the reverse order
@@ -309,6 +310,7 @@ mod test
 			co_break()
 		}));
 
+		app.update();
 		app.update();
 		app.update();
 
