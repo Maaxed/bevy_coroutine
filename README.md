@@ -72,3 +72,11 @@ fn my_coroutine(
 
 Each coroutine run in an exclusive system. They won't run in parallel with each other nor with other bevy systems.  
 For CPU intensive tasks, consider using [bevy_tasks](https://docs.rs/bevy_tasks/latest/bevy_tasks/) or [bevy_defer](https://github.com/mintlu8/bevy_defer/).
+
+## Versions
+
+| bevy        | bevy_coroutine |
+|-------------|----------------|
+| 0.14        | 0.1.2          |
+| 0.14        | 0.1.1          |
+| 0.14.0-rc.4 | 0.1.0          |
