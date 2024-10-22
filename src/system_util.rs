@@ -5,7 +5,7 @@ use bevy::ecs::system::{Adapt, AdapterSystem};
 pub fn with_input<S, I, O, M>(input: I, system: S) -> AdapterSystem<InputAdapter<I>, S::System>
 where
 	S: IntoSystem<I, O, M>,
-	I: Sync + Send + Clone,
+	I: Sync + Send + Clone + 'static,
 {
 	let system = IntoSystem::into_system(system);
 	let name = format!("with_input({})", system.name());
