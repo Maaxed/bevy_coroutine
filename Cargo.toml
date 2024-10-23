@@ -19,7 +19,7 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
-bevy = { version = "0.14.2", default-features = false, features = [] }
+bevy = { version = "0.14", default-features = false, features = [] }
 
 [dev-dependencies]
-bevy = { version = "0.14.2", default-features = true, features = ["dynamic_linking"] }
+bevy = { version = "0.14", default-features = true, features = ["dynamic_linking"] }
