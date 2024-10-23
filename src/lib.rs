@@ -53,6 +53,7 @@ pub struct CoroutineUpdateSystem;
 pub type BoxedCoroutine = BoxedSystem<(), CoResult>;
 
 /// The result of a coroutine resumption.
+#[must_use]
 pub struct CoResult
 {
 	/// Controls the execution of the coroutine.

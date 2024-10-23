@@ -19,7 +19,7 @@ pub struct InputAdapter<I>(I);
 impl<S> Adapt<S> for InputAdapter<S::In>
 where
 	S: System,
-	S::In: Sync + Send + Clone,
+	S::In: Sync + Send + Clone + 'static,
 {
 	type In = ();
 	type Out = S::Out;
