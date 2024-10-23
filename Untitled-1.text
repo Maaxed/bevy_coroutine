@@ -1,0 +1,63 @@
+
+C1() -> break_with(pipe(C2, C4))
+C2() -> break_with(C3)
+C3() -> break(A)
+C4(A) -> break(B)
+
+4 boxes = #coroutine_systems + 1vec
+
+
+
+
+Box(C1) -> break_with(Box(pipe(C2, C4)))
+Box(pipe(C2, C4))
+{
+	C2 -> break_with(Box(C3))
+	-> break_with(Box(pipe(Box(C3), C4)))
+}
+Box(pipe(Box(C3), C4))
+{
+	C3 -> break(A)
+	-> break_with(Box(with_input(A, C4)))
+}
+Box(with_input(A, C4)) -> break(B)
+
+5 boxes = #implicite_break_with + 1
+
+
+
+
+
+
+
+Co(Box(C1)) -> Co(Box(pipe(Co(Box(C2)), C4))), continue
+Co(Box(pipe(Co(Box(C2)), C4)))
+{
+	Co(Box(C2)) -> Co(Box(C3)), continue
+	-> Co(Box(pipe(Co(Box(C3)), C4))), continue
+}
+Co(Box(pipe(Co(Box(C3)), C4)))
+{
+	Co(Box(C3)) -> break(A)
+	-> Co(Box(with_input(A, C4))), continue
+}
+Co(Box(with_input(A, Co(Box(C4))))) -> break(B)
+
+5 box
+
+
+
+Co(Box(C1)) -> Co(Box(pipe(Co(Box(C2)), None, Co(Box(C4))))), continue
+Co(Box(pipe(Co(Box(C2)), None, Co(Box(C4)))))
+{
+	Co(Box(C2)) -> Co(Box(C3)), continue
+	-> Co(Box(pipe(Co(Box(C3)), None, Co(Box(C4))))), continue
+}
+Co(Box(pipe(Co(Box(C3)), None, Co(Box(C4)))))
+{
+	Co(Box(C3)) -> break(A)
+	-> Co(Box(pipe(Co(Box(C3)), Some(A), Co(Box(C4))))), continue
+}
+Co(Box(pipe(Co(Box(C3)), Some(A), Co(Box(C4))))) -> break(B)
+
+5 boxes = #coroutine_systems + #explicite_pipes

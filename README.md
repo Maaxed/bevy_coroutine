@@ -77,6 +77,7 @@ For CPU intensive tasks, consider using [bevy_tasks](https://docs.rs/bevy_tasks/
 
 | bevy        | bevy_coroutine |
 |-------------|----------------|
+| 0.14        | 0.1.3          |
 | 0.14        | 0.1.2          |
 | 0.14        | 0.1.1          |
 | 0.14.0-rc.4 | 0.1.0          |
