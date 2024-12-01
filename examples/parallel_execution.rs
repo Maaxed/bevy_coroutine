@@ -21,8 +21,8 @@ fn run_coroutines(
 )
 {
 	// Run two coroutines in parallel
-	commands.add(Coroutine::new(print_numbers));
-	commands.add(Coroutine::new(print_numbers));
+	commands.queue(Coroutine::new(print_numbers));
+	commands.queue(Coroutine::new(print_numbers));
 }
 
 // Prints numbers from 0 to 3, printing a single number each update
@@ -46,7 +46,7 @@ fn stop_app(
 )
 {
 	// Exit after one second, hopefully all coroutines hae finished
-	if time.elapsed_seconds() > 1.0
+	if time.elapsed_secs() > 1.0
 	{
 		exit.send(AppExit::Success);
 	}

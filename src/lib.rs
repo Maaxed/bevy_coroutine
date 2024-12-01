@@ -129,7 +129,7 @@ impl CoroutineStack
 
 			if output.control_flow.is_break()
 			{
-				world.remove_system(co_system)?;
+				world.unregister_system(co_system)?;
 				let pop = self.stack.pop();
 				debug_assert_eq!(pop.unwrap(), co_system);
 			}
@@ -158,7 +158,7 @@ struct Coroutines(Vec<CoroutineStack>);
 /// fn launch_coroutine(
 ///     mut commands: Commands
 /// ) {
-///     commands.add(Coroutine::new(my_coroutine));
+///     commands.queue(Coroutine::new(my_coroutine));
 /// }
 /// 
 /// fn my_coroutine() -> CoResult {
@@ -228,7 +228,7 @@ pub fn launch_coroutine<M, C: IntoCoroutines<M> + Clone>(coroutines: C) -> impl 
 {
 	move |mut commands: Commands|
 	{
-		commands.add(Coroutine::new(coroutines.clone()));
+		commands.queue(Coroutine::new(coroutines.clone()));
 	}
 }
 
@@ -303,7 +303,7 @@ mod test
 		app.add_systems(Startup, launch_coroutine(|mut events: ResMut<TestEvents>, mut commands: Commands|
 		{
 			events.0.push("COROUTINE_1");
-			commands.add(Coroutine::new(|mut events: ResMut<TestEvents>|
+			commands.queue(Coroutine::new(|mut events: ResMut<TestEvents>|
 			{
 				events.0.push("COROUTINE_2");
 				co_break()

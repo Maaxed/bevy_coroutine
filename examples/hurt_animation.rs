@@ -35,14 +35,19 @@ fn setup_player(
 	asset_server: Res<AssetServer>,
 )
 {
-	let mut camera = Camera2dBundle::default();
-	camera.projection.scaling_mode = ScalingMode::WindowSize(4.0);
-
-	commands.spawn(camera);
 	commands.spawn((
-		SpriteBundle
+		Camera2d,
+		OrthographicProjection
 		{
-        	texture: asset_server.load("embedded://hurt_animation/slime.png"),
+			scaling_mode: ScalingMode::WindowSize,
+			scale: 1.0 / 4.0,
+			.. OrthographicProjection::default_2d()
+		}
+	));
+	commands.spawn((
+		Sprite
+		{
+			image: asset_server.load("embedded://hurt_animation/slime.png"),
 			..default()
 		},
 		Player
@@ -61,7 +66,7 @@ fn run_coroutines(
 		{
 			let player = player.single();
 			// Launch a coroutine
-			commands.add(Coroutine::new(with_input(player, play_hurt_animation)));
+			commands.queue(Coroutine::new(with_input(player, play_hurt_animation)));
 		}
 	}
 }

@@ -59,7 +59,11 @@ where
 	type In = S::In;
 	type Out = CoResult;
 
-	fn adapt(&mut self, input: Self::In, run_system: impl FnOnce(<S as System>::In) -> <S as System>::Out) -> Self::Out
+	fn adapt(
+		&mut self,
+		input: <Self::In as SystemInput>::Inner<'_>,
+		run_system: impl FnOnce(SystemIn<'_, S>) -> <S as System>::Out,
+	) -> Self::Out
 	{
 		break_if(run_system(input))
 	}
@@ -86,7 +90,11 @@ where
 	type In = S::In;
 	type Out = CoResult;
 
-	fn adapt(&mut self, input: Self::In, run_system: impl FnOnce(<S as System>::In) -> <S as System>::Out) -> Self::Out
+	fn adapt(
+		&mut self,
+		input: <Self::In as SystemInput>::Inner<'_>,
+		run_system: impl FnOnce(SystemIn<'_, S>) -> <S as System>::Out,
+	) -> Self::Out
 	{
 		break_if(!run_system(input))
 	}

@@ -18,7 +18,7 @@ fn run_coroutines(
 )
 {
 	// Run two coroutine in parallel using the same system
-	commands.add(Coroutine::new((print_numbers, stop_app)));
+	commands.queue(Coroutine::new((print_numbers, stop_app)));
 }
 
 // Prints numbers from 0 to 3, printing a single number each update

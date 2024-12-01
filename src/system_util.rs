@@ -4,7 +4,7 @@ use bevy::ecs::system::{Adapt, AdapterSystem};
 /// Generates a system that executes the given system with the given input
 pub fn with_input<S, I, O, M>(input: I, system: S) -> AdapterSystem<InputAdapter<I>, S::System>
 where
-	S: IntoSystem<I, O, M>,
+	S: IntoSystem<In<I>, O, M>,
 	I: Sync + Send + Clone + 'static,
 {
 	let system = IntoSystem::into_system(system);
@@ -16,15 +16,19 @@ where
 #[doc(hidden)]
 pub struct InputAdapter<I>(I);
 
-impl<S> Adapt<S> for InputAdapter<S::In>
+impl<'l, S> Adapt<S> for InputAdapter<SystemIn<'l, S>>
 where
 	S: System,
-	S::In: Sync + Send + Clone + 'static,
+	SystemIn<'l, S>: Sync + Send + Clone + 'static,
 {
 	type In = ();
 	type Out = S::Out;
 
-	fn adapt(&mut self, _input: (), run_system: impl FnOnce(S::In) -> S::Out) -> S::Out
+	fn adapt(
+		&mut self,
+		_input: (),
+		run_system: impl FnOnce(SystemIn<'_, S>) -> S::Out,
+	) -> S::Out
 	{
 		run_system(self.0.clone())
 	}
