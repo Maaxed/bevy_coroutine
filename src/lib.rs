@@ -12,9 +12,8 @@ pub use waiting::*;
 use std::ops::ControlFlow;
 
 use bevy::ecs::system::{BoxedSystem, RegisteredSystemError, SystemId};
-use bevy::ecs::world::Command;
 use bevy::prelude::*;
-use bevy::utils::all_tuples;
+use variadics_please::all_tuples;
 
 /// `use bevy_coroutine::prelude::*;` to import the plugin, essential types and utility functions.
 pub mod prelude

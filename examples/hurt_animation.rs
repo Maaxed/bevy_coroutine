@@ -37,12 +37,12 @@ fn setup_player(
 {
 	commands.spawn((
 		Camera2d,
-		OrthographicProjection
+		Projection::Orthographic(OrthographicProjection
 		{
 			scaling_mode: ScalingMode::WindowSize,
 			scale: 1.0 / 4.0,
 			.. OrthographicProjection::default_2d()
-		}
+		}),
 	));
 	commands.spawn((
 		Sprite
@@ -58,17 +58,19 @@ fn run_coroutines(
 	mut mouse_clicked: EventReader<MouseButtonInput>,
 	mut commands: Commands,
 	player: Query<Entity, With<Player>>,
-)
+) -> Result
 {
 	for event in mouse_clicked.read()
 	{
 		if event.state.is_pressed()
 		{
-			let player = player.single();
+			let player = player.single()?;
 			// Launch a coroutine
 			commands.queue(Coroutine::new(with_input(player, play_hurt_animation)));
 		}
 	}
+
+	Ok(())
 }
 
 fn play_hurt_animation(In(target): In<Entity>) -> CoResult {
