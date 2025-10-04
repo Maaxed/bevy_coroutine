@@ -41,13 +41,13 @@ fn print_numbers(
 }
 
 fn stop_app(
-	mut exit: EventWriter<AppExit>,
+	mut exit: MessageWriter<AppExit>,
     time: Res<Time>,
 )
 {
 	// Exit after one second, hopefully all coroutines hae finished
 	if time.elapsed_secs() > 1.0
 	{
-		exit.send(AppExit::Success);
+		exit.write(AppExit::Success);
 	}
 }

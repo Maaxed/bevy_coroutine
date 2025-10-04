@@ -39,8 +39,8 @@ fn print_numbers(
 	res
 }
 
-fn stop_app(mut exit: EventWriter<AppExit>) -> CoResult
+fn stop_app(mut exit: MessageWriter<AppExit>) -> CoResult
 {
-	exit.send(AppExit::Success);
+	exit.write(AppExit::Success);
 	co_break()
 }

@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy::ecs::system::{Adapt, AdapterSystem};
+use bevy::ecs::system::{Adapt, AdapterSystem, RunSystemError};
 
 /// Generates a system that executes the given system with the given input
 pub fn with_input<S, I, O, M>(input: I, system: S) -> AdapterSystem<InputAdapter<I>, S::System>
@@ -27,8 +27,8 @@ where
 	fn adapt(
 		&mut self,
 		_input: (),
-		run_system: impl FnOnce(SystemIn<'_, S>) -> S::Out,
-	) -> S::Out
+		run_system: impl FnOnce(SystemIn<'_, S>) -> Result<S::Out, RunSystemError>,
+	) -> Result<S::Out, RunSystemError>
 	{
 		run_system(self.0.clone())
 	}

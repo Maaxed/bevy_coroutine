@@ -1,9 +1,9 @@
 use std::time::Duration;
 
+use bevy::camera::ScalingMode;
 use bevy::prelude::*;
 use bevy::color::palettes::basic::*;
 use bevy::input::mouse::MouseButtonInput;
-use bevy::render::camera::ScalingMode;
 use bevy::asset::embedded_asset;
 use bevy_coroutine::prelude::*;
 
@@ -55,7 +55,7 @@ fn setup_player(
 }
 
 fn run_coroutines(
-	mut mouse_clicked: EventReader<MouseButtonInput>,
+	mut mouse_clicked: MessageReader<MouseButtonInput>,
 	mut commands: Commands,
 	player: Query<Entity, With<Player>>,
 ) -> Result

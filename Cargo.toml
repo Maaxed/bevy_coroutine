@@ -1,6 +1,6 @@
 [package]
 name = "bevy_coroutine"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2024"
 license = "MIT"
 description = "A simple library to run coroutines in Bevy"
@@ -19,8 +19,8 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
-bevy = { version = "0.16", default-features = false, features = [] }
+bevy = { version = "0.17", default-features = false, features = [] }
 variadics_please = "1.1.0"
 
 [dev-dependencies]
-bevy = { version = "0.16", default-features = true, features = ["dynamic_linking"] }
+bevy = { version = "0.17", default-features = true, features = ["dynamic_linking"] }

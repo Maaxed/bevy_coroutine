@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use bevy::ecs::system::{Adapt, AdapterSystem};
+use bevy::ecs::system::{Adapt, AdapterSystem, RunSystemError};
 use bevy::prelude::*;
 
 use crate::{CoResult, co_continue, co_break};
@@ -62,10 +62,10 @@ where
 	fn adapt(
 		&mut self,
 		input: <Self::In as SystemInput>::Inner<'_>,
-		run_system: impl FnOnce(SystemIn<'_, S>) -> <S as System>::Out,
-	) -> Self::Out
+		run_system: impl FnOnce(SystemIn<'_, S>) -> Result<bool, RunSystemError>,
+	) -> Result<Self::Out, RunSystemError>
 	{
-		break_if(run_system(input))
+		Ok(break_if(run_system(input)?))
 	}
 }
 
@@ -93,9 +93,9 @@ where
 	fn adapt(
 		&mut self,
 		input: <Self::In as SystemInput>::Inner<'_>,
-		run_system: impl FnOnce(SystemIn<'_, S>) -> <S as System>::Out,
-	) -> Self::Out
+		run_system: impl FnOnce(SystemIn<'_, S>) -> Result<bool, RunSystemError>,
+	) -> Result<Self::Out, RunSystemError>
 	{
-		break_if(!run_system(input))
+		Ok(break_if(!run_system(input)?))
 	}
 }
